@@ -13,23 +13,23 @@ const PER_QUERY = 50;
 const PER_LIST = 50;
 
 const PERIODS = [
-  { id: 'week', label: 'Tuần', days: 7 },
-  { id: 'month', label: 'Tháng', days: 30 },
-  { id: 'year', label: 'Năm', days: 365 },
+  { id: 'week', label: 'Week', days: 7 },
+  { id: 'month', label: 'Month', days: 30 },
+  { id: 'year', label: 'Year', days: 365 },
 ];
 
 // The search API cannot OR qualifiers together, so each category runs one query
 // per topic and the results are merged.
 const CATEGORIES = [
-  { id: 'all', label: 'Xu hướng', queries: [''] },
+  { id: 'all', label: 'Trending', queries: [''] },
   {
     id: 'ai-tools',
-    label: 'Công cụ AI',
+    label: 'AI tools',
     queries: ['topic:llm', 'topic:ai', 'topic:generative-ai', 'topic:machine-learning', 'topic:mcp', 'topic:chatgpt'],
   },
   {
     id: 'ai-agents',
-    label: 'AI Agent',
+    label: 'AI agents',
     queries: ['topic:ai-agent', 'topic:ai-agents', 'topic:agents', 'topic:agentic-ai', 'topic:multi-agent', 'topic:claude-code'],
   },
   {
@@ -127,7 +127,7 @@ async function main() {
   const lists = {};
   const categories = [
     ...CATEGORIES.map(({ id, label }) => ({ id, label })),
-    { id: 'lang', label: 'Ngôn ngữ', subs: LANGUAGES.map(([id, label]) => ({ id, label })) },
+    { id: 'lang', label: 'Languages', subs: LANGUAGES.map(([id, label]) => ({ id, label })) },
   ];
   const jobs = [
     ...CATEGORIES.map((c) => ({ key: c.id, queries: c.queries })),

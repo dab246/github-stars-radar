@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GitHub Stars Radar</title>
-  <meta name="description" content="Tổng hợp các repository GitHub nhiều sao nhất trong tuần, tháng, năm: công cụ AI, AI agent, mobile, web và theo ngôn ngữ.">
+  <meta name="description" content="The most-starred new GitHub repositories of the week, month and year: AI tools, AI agents, mobile, web and by language.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23f97316' d='M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7.1L12 17.3 5.8 21l1.6-7.1L2 9.2l7.1-.6z'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,25 +16,35 @@
     <header class="hero">
       <div>
         <h1><span class="star">★</span> GitHub Stars Radar</h1>
-        <p class="sub">Repository mới nhiều sao nhất trên GitHub, theo tuần, tháng và năm.</p>
+        <p class="sub" data-i18n="subtitle"></p>
       </div>
-      <div class="period" role="tablist" aria-label="Khoảng thời gian" id="periods"></div>
+      <div class="controls">
+        <div class="locale" role="group" id="locales" data-i18n-aria="localeAria">
+          <button data-locale="en">EN</button>
+          <button data-locale="vi">VI</button>
+        </div>
+        <div class="period" role="tablist" id="periods" data-i18n-aria="periodAria"></div>
+      </div>
     </header>
 
-    <nav class="chips" id="categories" aria-label="Danh mục"></nav>
-    <nav class="chips chips-sub" id="subs" aria-label="Ngôn ngữ" hidden></nav>
+    <nav class="chips" id="categories" data-i18n-aria="categoriesAria"></nav>
+    <nav class="chips chips-sub" id="subs" data-i18n-aria="languagesAria" hidden></nav>
 
     <div class="toolbar">
       <p class="hint" id="hint"></p>
       <label class="search">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="q" type="search" placeholder="Lọc theo tên, mô tả, topic…" autocomplete="off">
+        <input id="q" type="search" data-i18n-placeholder="searchPlaceholder" autocomplete="off">
       </label>
     </div>
 
     <section class="board">
       <div class="row head" aria-hidden="true">
-        <span>#</span><span>Repository</span><span>Dùng để làm gì</span><span class="right">Sao</span><span></span>
+        <span>#</span>
+        <span data-i18n="colRepo"></span>
+        <span data-i18n="colDesc"></span>
+        <span class="right" data-i18n="colStars"></span>
+        <span></span>
       </div>
       <ol id="list" class="list"></ol>
       <p id="empty" class="empty" hidden></p>
@@ -42,7 +52,7 @@
 
     <footer class="foot">
       <span id="updated"></span>
-      <span>Dữ liệu từ GitHub Search API · repo tạo trong khoảng thời gian đã chọn, xếp theo tổng số sao.</span>
+      <span data-i18n="source"></span>
     </footer>
   </div>
   <script src="app.js"></script>

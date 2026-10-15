@@ -51,6 +51,32 @@ a { color: inherit; text-decoration: none; }
 .hero .star { color: var(--accent); }
 .hero .sub { margin: 6px 0 0; color: var(--muted); }
 
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.locale {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.locale button {
+  border: 0;
+  background: transparent;
+  color: var(--dim);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.locale button + button { border-left: 1px solid var(--line); }
+.locale button[aria-pressed='true'] { background: var(--panel-2); color: var(--text); }
+.locale button:not([aria-pressed='true']):hover { color: var(--text); }
+
 .period {
   display: inline-flex;
   padding: 4px;
@@ -294,7 +320,8 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 @media (max-width: 720px) {
   .page { padding: 20px 16px 36px; }
   .hero h1 { font-size: 22px; }
-  .period { width: 100%; }
+  .controls { width: 100%; }
+  .period { flex: 1; }
   .period button { flex: 1; }
   .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-right: -16px; padding-right: 16px; }
   .chips::-webkit-scrollbar { display: none; }

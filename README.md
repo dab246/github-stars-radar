@@ -1,27 +1,29 @@
 # ★ GitHub Stars Radar
 
-Trang tổng hợp các repository GitHub **nhiều sao nhất trong tuần, tháng, năm**, chia theo danh mục:
+A site that lists the **most-starred new GitHub repositories of the week, month and year**, grouped by category:
 
-- **Xu hướng**: tất cả repo
-- **Công cụ AI**: `llm`, `ai`, `generative-ai`, `machine-learning`, `mcp`, `chatgpt`
-- **AI Agent**: `ai-agent`, `ai-agents`, `agents`, `agentic-ai`, `multi-agent`, `claude-code`
+- **Trending**: all repositories
+- **AI tools**: `llm`, `ai`, `generative-ai`, `machine-learning`, `mcp`, `chatgpt`
+- **AI agents**: `ai-agent`, `ai-agents`, `agents`, `agentic-ai`, `multi-agent`, `claude-code`
 - **Mobile**: `android`, `ios`, `flutter`, `react-native`, `swiftui`, `jetpack-compose`
 - **Web**: `react`, `nextjs`, `vue`, `svelte`, `frontend`, `tailwindcss`, `web`
-- **Ngôn ngữ**: TypeScript, JavaScript, Python, Go, Rust, Java, Kotlin, Swift, Dart, C++, C#, PHP, Ruby, Zig
+- **Languages**: TypeScript, JavaScript, Python, Go, Rust, Java, Kotlin, Swift, Dart, C++, C#, PHP, Ruby, Zig
 
-Bấm **+** để lưu repo vào tab **Đã lưu** (lưu trên trình duyệt).
+Live site: https://dab246.github.io/github-stars-radar/
 
-## Cách hoạt động
+Click **+** to save a repository to the **Saved** tab (stored in your browser). The interface is available in English and Vietnamese (EN / VI switch in the header).
 
-- `scripts/fetch.mjs` gọi GitHub Search API, lấy các repo được **tạo** trong 7 / 30 / 365 ngày gần nhất, xếp theo tổng số sao, và ghi ra `site/data/repos.json`.
-- `site/` là trang tĩnh (HTML/CSS/JS thuần, không cần build).
-- GitHub Actions (`.github/workflows/update.yml`) chạy mỗi 6 giờ: cập nhật dữ liệu, commit, rồi deploy lên GitHub Pages.
+## How it works
 
-## Chạy local
+- `scripts/fetch.mjs` queries the GitHub Search API for repositories **created** in the last 7 / 30 / 365 days, ranks them by total stars, and writes `site/data/repos.json`. GitHub does not expose stars gained per period, so "top of the week" means the most-starred repositories created that week.
+- `site/` is a static page (plain HTML/CSS/JS, no build step). UI strings live in the `I18N` table in `site/app.js`.
+- GitHub Actions (`.github/workflows/update.yml`) runs every 6 hours: it refreshes the data, commits it, and deploys to GitHub Pages.
+
+## Run locally
 
 ```bash
 GITHUB_TOKEN=$(gh auth token) node scripts/fetch.mjs   # Node 18+
-python3 -m http.server -d site 8000                    # mở http://localhost:8000
+python3 -m http.server -d site 8000                    # open http://localhost:8000
 ```
 
-Muốn thêm danh mục hoặc ngôn ngữ: sửa `CATEGORIES` / `LANGUAGES` trong `scripts/fetch.mjs`, giao diện tự hiển thị theo dữ liệu.
+To add a category or language, edit `CATEGORIES` / `LANGUAGES` in `scripts/fetch.mjs` and add its label to `I18N` in `site/app.js`.

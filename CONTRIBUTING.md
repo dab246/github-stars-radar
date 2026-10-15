@@ -25,24 +25,24 @@ python3 -m http.server -d site 8000   # open http://localhost:8000
 GITHUB_TOKEN=$(gh auth token) node scripts/fetch.mjs
 ```
 
-The search API allows 30 requests per minute, so a full run takes about 5 minutes.
+The search API allows 30 requests per minute, so a full run takes about 8 minutes. The token is required: the hot view uses the GraphQL API.
 
 ## Common changes
 
 ### Add a category
 
-1. Add an entry to `CATEGORIES` in `scripts/fetch.mjs`, with one query per topic:
+1. Add an entry to `CATEGORIES` in `scripts/fetch.mjs` with its topics:
    ```js
-   { id: 'devops', label: 'DevOps', queries: ['topic:devops', 'topic:kubernetes', 'topic:terraform'] },
+   { id: 'devops', label: 'DevOps', topics: ['devops', 'kubernetes', 'terraform'] },
    ```
 2. Add the label to **every** locale in `I18N.*.categories` in `site/app.js`.
 3. Run the fetch script, check the page locally, and commit the code. Leave `repos.json` out of the commit; the scheduled workflow regenerates it.
 
-Each new topic adds 3 search requests per run (one per period), so keep the list focused.
+Each new topic adds 4 search requests per run (three *new* periods plus *all-time*), so keep the list focused. The *hot* view needs no extra requests: it filters trending repositories by these topics.
 
 ### Add a language
 
-Add `['id', 'Display name']` to `LANGUAGES` in `scripts/fetch.mjs`. The display name must match GitHub's [linguist name](https://github.com/github-linguist/linguist/blob/main/lib/linguist/languages.yml). Optionally add its color to `LANG_COLORS` in `site/app.js`.
+Add `['id', 'Display name', 'trending-slug']` to `LANGUAGES` in `scripts/fetch.mjs`. The slug is the language part of its `github.com/trending/<slug>` URL. The display name must match GitHub's [linguist name](https://github.com/github-linguist/linguist/blob/main/lib/linguist/languages.yml). Optionally add its color to `LANG_COLORS` in `site/app.js`.
 
 ### Add a translation
 

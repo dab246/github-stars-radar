@@ -10,32 +10,46 @@
   };
 
   const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
+  const count = (shown, total, of) => `${shown}${total !== shown ? ` ${of} ${total}` : ''}`;
 
   const I18N = {
     en: {
       intl: 'en-US',
-      subtitle: 'The most-starred new repositories on GitHub, by week, month and year.',
-      periods: { week: 'Week', month: 'Month', year: 'Year' },
+      subtitle: 'What is new, what is hot and what is biggest on GitHub, by category and language.',
+      modes: { new: 'New', hot: 'Hot', top: 'All-time' },
+      periods: { day: 'Today', week: 'Week', month: 'Month', year: 'Year', all: 'All time' },
       categories: {
-        all: 'Trending', 'ai-tools': 'AI tools', 'ai-agents': 'AI agents', mobile: 'Mobile', web: 'Web',
-        lang: 'Languages', saved: 'Saved',
+        all: 'All', 'ai-skills': 'AI dev skills', 'ai-tools': 'AI tools', 'ai-agents': 'AI agents', mobile: 'Mobile',
+        web: 'Web', lang: 'Languages', saved: 'Saved',
       },
       colRepo: 'Repository',
       colDesc: 'What it does',
       colStars: 'Stars',
+      colGained: 'Stars gained',
       searchPlaceholder: 'Filter by name, description, topic…',
       localeAria: 'Interface language',
+      modeAria: 'Ranking',
       periodAria: 'Time period',
       categoriesAria: 'Categories',
       languagesAria: 'Languages',
-      source: 'Data from the GitHub Search API · repos created in the selected period, ranked by total stars.',
-      hintPeriod: (date, shown, total) => `Created since ${date} · ${shown}${total !== shown ? ` of ${total}` : ''} results`,
+      source: {
+        new: 'Data from the GitHub Search API · repos created in the selected period, ranked by total stars.',
+        hot: 'Data from GitHub Trending · repos of any age, ranked by stars gained in the selected period.',
+        top: 'Data from the GitHub Search API · repos ranked by total stars.',
+      },
+      hint: {
+        new: (date, shown, total) => `Created since ${date} · ${count(shown, total, 'of')} results`,
+        hot: (period, shown, total) => `Most stars gained ${period} · ${count(shown, total, 'of')} results`,
+        top: (shown, total) => `Most-starred repos of all time · ${count(shown, total, 'of')} results`,
+      },
+      hotPhrase: { day: 'today', week: 'this week', month: 'this month' },
       hintSaved: (n) => `${plural(n, 'repo')} saved in this browser`,
       emptySaved: 'No saved repos yet. Click + on a row to save it.',
       emptyFilter: 'No repos match this filter.',
       loadError: 'Could not load data. Try reloading the page.',
       noDesc: 'No description',
       created: (when) => `Created ${when}`,
+      totalStars: (n) => `${n} stars in total`,
       today: 'today',
       daysAgo: (n) => `${plural(n, 'day')} ago`,
       monthsAgo: (n) => `${plural(n, 'month')} ago`,
@@ -46,28 +60,41 @@
     },
     vi: {
       intl: 'vi-VN',
-      subtitle: 'Repository mới nhiều sao nhất trên GitHub, theo tuần, tháng và năm.',
-      periods: { week: 'Tuần', month: 'Tháng', year: 'Năm' },
+      subtitle: 'Repo mới, repo đang hot và repo lớn nhất trên GitHub, theo danh mục và ngôn ngữ.',
+      modes: { new: 'Mới', hot: 'Hot', top: 'Mọi thời đại' },
+      periods: { day: 'Hôm nay', week: 'Tuần', month: 'Tháng', year: 'Năm', all: 'Mọi thời đại' },
       categories: {
-        all: 'Xu hướng', 'ai-tools': 'Công cụ AI', 'ai-agents': 'AI Agent', mobile: 'Mobile', web: 'Web',
-        lang: 'Ngôn ngữ', saved: 'Đã lưu',
+        all: 'Tất cả', 'ai-skills': 'Skill AI cho dev', 'ai-tools': 'Công cụ AI', 'ai-agents': 'AI Agent',
+        mobile: 'Mobile', web: 'Web', lang: 'Ngôn ngữ', saved: 'Đã lưu',
       },
       colRepo: 'Repository',
       colDesc: 'Dùng để làm gì',
       colStars: 'Sao',
+      colGained: 'Sao tăng thêm',
       searchPlaceholder: 'Lọc theo tên, mô tả, topic…',
       localeAria: 'Ngôn ngữ giao diện',
+      modeAria: 'Bảng xếp hạng',
       periodAria: 'Khoảng thời gian',
       categoriesAria: 'Danh mục',
       languagesAria: 'Ngôn ngữ lập trình',
-      source: 'Dữ liệu từ GitHub Search API · repo tạo trong khoảng thời gian đã chọn, xếp theo tổng số sao.',
-      hintPeriod: (date, shown, total) => `Repo tạo từ ${date} · ${shown}${total !== shown ? ` / ${total}` : ''} kết quả`,
+      source: {
+        new: 'Dữ liệu từ GitHub Search API · repo tạo trong khoảng thời gian đã chọn, xếp theo tổng số sao.',
+        hot: 'Dữ liệu từ GitHub Trending · repo ở mọi độ tuổi, xếp theo số sao tăng thêm trong khoảng thời gian đã chọn.',
+        top: 'Dữ liệu từ GitHub Search API · repo xếp theo tổng số sao.',
+      },
+      hint: {
+        new: (date, shown, total) => `Repo tạo từ ${date} · ${count(shown, total, '/')} kết quả`,
+        hot: (period, shown, total) => `Tăng nhiều sao nhất ${period} · ${count(shown, total, '/')} kết quả`,
+        top: (shown, total) => `Repo nhiều sao nhất mọi thời đại · ${count(shown, total, '/')} kết quả`,
+      },
+      hotPhrase: { day: 'hôm nay', week: 'tuần này', month: 'tháng này' },
       hintSaved: (n) => `${n} repo đã lưu trên trình duyệt này`,
       emptySaved: 'Chưa lưu repo nào. Bấm + ở một dòng để lưu lại.',
       emptyFilter: 'Không có repo nào khớp bộ lọc.',
       loadError: 'Không tải được dữ liệu. Thử tải lại trang.',
       noDesc: 'Chưa có mô tả',
       created: (when) => `Tạo ${when}`,
+      totalStars: (n) => `Tổng ${n} sao`,
       today: 'hôm nay',
       daysAgo: (n) => `${n} ngày trước`,
       monthsAgo: (n) => `${n} tháng trước`,
@@ -80,14 +107,15 @@
 
   const $ = (id) => document.getElementById(id);
   const els = {
-    locales: $('locales'), periods: $('periods'), categories: $('categories'), subs: $('subs'), hint: $('hint'),
-    q: $('q'), list: $('list'), empty: $('empty'), updated: $('updated'),
+    locales: $('locales'), modes: $('modes'), periods: $('periods'), categories: $('categories'), subs: $('subs'),
+    hint: $('hint'), q: $('q'), list: $('list'), empty: $('empty'), updated: $('updated'), source: $('source'),
+    colStars: $('col-stars'),
   };
 
   let data = null;
   let saved = loadSaved();
   let locale = loadLocale();
-  const state = { period: 'week', category: 'all', sub: null, query: '' };
+  const state = { mode: 'new', period: 'week', category: 'all', sub: null, query: '' };
   const t = () => I18N[locale];
 
   function loadSaved() {
@@ -114,6 +142,8 @@
   const fmtNumber = (n) => new Intl.NumberFormat(t().intl).format(n);
   const fmtDate = (iso) => new Date(iso).toLocaleDateString(t().intl, { dateStyle: 'medium' });
   const categoryLabel = (c) => t().categories[c.id] || c.label;
+  const currentMode = () => data.modes.find((m) => m.id === state.mode);
+  const isSavedView = () => state.category === 'saved';
 
   // "claude-mem" -> "Claude Mem"; names that already have capitals keep them.
   function prettyName(full) {
@@ -130,30 +160,44 @@
     return t().yearsAgo(Math.floor(days / 365));
   }
 
-  // URL hash: #/week/ai-agents, #/month/lang/python, #/saved
+  function setMode(id, period) {
+    const mode = data.modes.find((m) => m.id === id);
+    if (!mode) return;
+    state.mode = mode.id;
+    state.period = mode.periods.some((p) => p.id === period) ? period : mode.periods[0].id;
+  }
+
+  function setCategory(id, sub) {
+    const cat = data.categories.find((c) => c.id === id);
+    if (!cat) return;
+    state.category = cat.id;
+    state.sub = cat.subs ? (cat.subs.find((s) => s.id === sub) || cat.subs[0]).id : null;
+  }
+
+  // URL hash: #/new/week/ai-agents, #/hot/day/lang/python, #/top/all/web, #/saved.
+  // Older links without a mode (#/month/lang/rust) open the "new" view.
   function readHash() {
-    const [period, category, sub] = location.hash.replace(/^#\/?/, '').split('/');
-    if (data?.periods.some((p) => p.id === period)) state.period = period;
-    if (period === 'saved') { state.category = 'saved'; state.sub = null; return; }
-    const cat = data?.categories.find((c) => c.id === category);
-    if (cat) {
-      state.category = cat.id;
-      state.sub = cat.subs ? (cat.subs.find((s) => s.id === sub) || cat.subs[0]).id : null;
-    }
+    const parts = location.hash.replace(/^#\/?/, '').split('/');
+    if (parts[0] === 'saved') { state.category = 'saved'; state.sub = null; return; }
+    if (!data.modes.some((m) => m.id === parts[0])) parts.unshift('new');
+    const [mode, period, category, sub] = parts;
+    setMode(mode, period);
+    leaveSaved();
+    setCategory(category, sub);
   }
   function writeHash() {
-    const parts = state.category === 'saved' ? ['saved'] : [state.period, state.category, state.sub].filter(Boolean);
+    const parts = isSavedView() ? ['saved'] : [state.mode, state.period, state.category, state.sub].filter(Boolean);
     history.replaceState(null, '', `#/${parts.join('/')}`);
   }
 
   function currentRepos() {
-    if (state.category === 'saved') {
+    if (isSavedView()) {
       return Object.values(saved)
         .map((r) => data.repos[r.name] || r)
         .sort((a, b) => b.stars - a.stars);
     }
     const key = state.sub ? `${state.category}:${state.sub}` : state.category;
-    return (data.lists[state.period]?.[key] || []).map((n) => data.repos[n]).filter(Boolean);
+    return (data.lists[state.mode]?.[state.period]?.[key] || []).map((n) => data.repos[n]).filter(Boolean);
   }
 
   function renderStatic() {
@@ -165,9 +209,15 @@
     if (data) els.updated.textContent = t().updated(new Date(data.generatedAt).toLocaleString(t().intl, { dateStyle: 'medium', timeStyle: 'short' }));
   }
 
-  function renderPeriods() {
-    els.periods.innerHTML = data.periods.map((p) => `
-      <button role="tab" data-period="${esc(p.id)}" aria-selected="${state.category !== 'saved' && p.id === state.period}">${esc(t().periods[p.id] || p.label)}</button>
+  function renderModes() {
+    els.modes.innerHTML = data.modes.map((m) => `
+      <button role="tab" data-mode="${esc(m.id)}" aria-selected="${!isSavedView() && m.id === state.mode}">${esc(t().modes[m.id] || m.label)}</button>
+    `).join('');
+    const periods = currentMode().periods;
+    // A single period (all-time) needs no switch.
+    els.periods.hidden = periods.length < 2;
+    els.periods.innerHTML = periods.map((p) => `
+      <button role="tab" data-period="${esc(p.id)}" aria-selected="${!isSavedView() && p.id === state.period}">${esc(t().periods[p.id] || p.label)}</button>
     `).join('');
   }
 
@@ -176,13 +226,23 @@
     els.categories.innerHTML = data.categories.map((c) => `
       <button class="chip" data-category="${esc(c.id)}" aria-pressed="${c.id === state.category}">${esc(categoryLabel(c))}</button>
     `).join('') + `
-      <button class="chip" data-category="saved" aria-pressed="${state.category === 'saved'}">${esc(t().categories.saved)}${savedCount ? `<span class="count">${savedCount}</span>` : ''}</button>`;
+      <button class="chip" data-category="saved" aria-pressed="${isSavedView()}">${esc(t().categories.saved)}${savedCount ? `<span class="count">${savedCount}</span>` : ''}</button>`;
 
     const cat = data.categories.find((c) => c.id === state.category);
     els.subs.hidden = !cat?.subs;
     els.subs.innerHTML = cat?.subs ? cat.subs.map((s) => `
       <button class="chip" data-sub="${esc(s.id)}" aria-pressed="${s.id === state.sub}">${esc(s.label)}</button>
     `).join('') : '';
+  }
+
+  function starsHtml(r) {
+    const gained = !isSavedView() && state.mode === 'hot' ? r.gained?.[state.period] : undefined;
+    if (gained === undefined) return `<span class="stars"><span class="s">★</span>${fmtNumber(r.stars)}</span>`;
+    return `
+      <span class="stars gain" title="${esc(t().totalStars(fmtNumber(r.stars)))}">
+        <span class="up">+${fmtNumber(gained)}</span>
+        <span class="total"><span class="s">★</span>${fmtNumber(r.stars)}</span>
+      </span>`;
   }
 
   function rowHtml(r, i) {
@@ -211,7 +271,7 @@
             ${(r.topics || []).slice(0, 3).map((topic) => `<span>#${esc(topic)}</span>`).join('')}
           </div>
         </div>
-        <span class="stars"><span class="s">★</span>${fmtNumber(r.stars)}</span>
+        ${starsHtml(r)}
         <button class="save" data-save="${esc(r.name)}" aria-pressed="${isSaved}"
           aria-label="${esc(action)}: ${esc(r.name)}" title="${esc(action)}">${isSaved ? '✓' : '+'}</button>
       </li>`;
@@ -226,22 +286,33 @@
 
     els.list.innerHTML = items.map(rowHtml).join('');
     els.empty.hidden = items.length > 0;
-    els.empty.textContent = state.category === 'saved' && !q ? t().emptySaved : t().emptyFilter;
+    els.empty.textContent = isSavedView() && !q ? t().emptySaved : t().emptyFilter;
+    els.colStars.textContent = !isSavedView() && state.mode === 'hot' ? t().colGained : t().colStars;
+    els.source.textContent = t().source[state.mode];
 
-    if (state.category === 'saved') {
+    if (isSavedView()) {
       els.hint.textContent = t().hintSaved(items.length);
+    } else if (state.mode === 'new') {
+      const period = currentMode().periods.find((p) => p.id === state.period);
+      els.hint.textContent = t().hint.new(fmtDate(period.since), items.length, all.length);
+    } else if (state.mode === 'hot') {
+      els.hint.textContent = t().hint.hot(t().hotPhrase[state.period], items.length, all.length);
     } else {
-      const period = data.periods.find((p) => p.id === state.period);
-      els.hint.textContent = t().hintPeriod(fmtDate(period.since), items.length, all.length);
+      els.hint.textContent = t().hint.top(items.length, all.length);
     }
   }
 
   function render() {
     renderStatic();
-    renderPeriods();
+    renderModes();
     renderCategories();
     renderList();
     writeHash();
+  }
+
+  // Leaving the saved view goes back to the first category.
+  function leaveSaved() {
+    if (isSavedView()) setCategory('all');
   }
 
   els.locales.addEventListener('click', (e) => {
@@ -252,20 +323,27 @@
     if (data) render(); else renderStatic();
   });
 
+  els.modes.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-mode]');
+    if (!btn) return;
+    setMode(btn.dataset.mode, state.period);
+    leaveSaved();
+    render();
+  });
+
   els.periods.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-period]');
     if (!btn) return;
     state.period = btn.dataset.period;
-    if (state.category === 'saved') state.category = 'all';
+    leaveSaved();
     render();
   });
 
   els.categories.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-category]');
     if (!btn) return;
-    state.category = btn.dataset.category;
-    const cat = data.categories.find((c) => c.id === state.category);
-    state.sub = cat?.subs ? (state.sub && cat.subs.some((s) => s.id === state.sub) ? state.sub : cat.subs[0].id) : null;
+    if (btn.dataset.category === 'saved') { state.category = 'saved'; state.sub = null; }
+    else setCategory(btn.dataset.category, state.sub);
     render();
   });
 
@@ -313,6 +391,7 @@
       const res = await fetch('data/repos.json', { cache: 'no-cache' });
       if (!res.ok) throw new Error(res.status);
       data = await res.json();
+      if (!data.modes) throw new Error('outdated data format');
     } catch {
       els.list.innerHTML = '';
       els.empty.hidden = false;

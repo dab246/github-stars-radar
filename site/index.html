@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GitHub Stars Radar</title>
-  <meta name="description" content="The most-starred new GitHub repositories of the week, month and year: AI tools, AI agents, mobile, web and by language.">
+  <meta name="description" content="New, hot and all-time top GitHub repositories: AI dev skills, AI tools, AI agents, mobile, web and 14 languages.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23f97316' d='M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7.1L12 17.3 5.8 21l1.6-7.1L2 9.2l7.1-.6z'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,6 +23,7 @@
           <button data-locale="en">EN</button>
           <button data-locale="vi">VI</button>
         </div>
+        <div class="mode" role="tablist" id="modes" data-i18n-aria="modeAria"></div>
         <div class="period" role="tablist" id="periods" data-i18n-aria="periodAria"></div>
       </div>
     </header>
@@ -43,7 +44,7 @@
         <span>#</span>
         <span data-i18n="colRepo"></span>
         <span data-i18n="colDesc"></span>
-        <span class="right" data-i18n="colStars"></span>
+        <span class="right" id="col-stars"></span>
         <span></span>
       </div>
       <ol id="list" class="list"></ol>
@@ -52,7 +53,7 @@
 
     <footer class="foot">
       <span id="updated"></span>
-      <span data-i18n="source"></span>
+      <span id="source"></span>
     </footer>
   </div>
   <script src="app.js"></script>

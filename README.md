@@ -2,9 +2,9 @@
 
 # ⭐ GitHub Stars Radar
 
-**The most-starred new GitHub repositories of the week, month and year, in one place.**
+**What is new, what is hot and what is biggest on GitHub, in one place.**
 
-AI tools · AI agents · Mobile · Web · 14 programming languages
+AI dev skills · AI tools · AI agents · Mobile · Web · 14 programming languages
 
 [![Live site](https://img.shields.io/badge/%E2%86%92%20open%20the%20live%20site-f97316?style=for-the-badge&logo=githubpages&logoColor=white)](https://dab246.github.io/github-stars-radar/)
 
@@ -28,8 +28,8 @@ AI tools · AI agents · Mobile · Web · 14 programming languages
 
 <table>
   <tr>
-    <td width="72%"><img src="docs/screenshot-desktop.png" alt="Desktop view: top AI agent repositories of the week"></td>
-    <td width="28%"><img src="docs/screenshot-mobile.png" alt="Mobile view: top Rust repositories of the month"></td>
+    <td width="72%"><img src="docs/screenshot-desktop.png" alt="Desktop view: hot AI agent repositories of the week"></td>
+    <td width="28%"><img src="docs/screenshot-mobile.png" alt="Mobile view: new Rust repositories of the month"></td>
   </tr>
 </table>
 
@@ -50,18 +50,24 @@ AI tools · AI agents · Mobile · Web · 14 programming languages
 
 ## Why
 
-GitHub Trending shows the last few days and mixes old and new projects. **GitHub Stars Radar** answers one question: *which repositories created recently got the most stars?* You can look by week, month or year, and narrow down to the area you care about.
+GitHub Trending mixes old and new projects and has no categories. GitHub search can rank by stars but knows nothing about momentum. **GitHub Stars Radar** puts three questions side by side, each split by category and language:
+
+- **New:** which repositories *created* this week, month or year got the most stars?
+- **Hot:** which repositories, of any age, *gained* the most stars today, this week or this month?
+- **All-time:** which repositories are the biggest overall?
 
 ## Features
 
 | | |
 |---|---|
-| 📅 **Week / Month / Year** | Repositories created in the last 7, 30 or 365 days, ranked by stars |
-| 🗂️ **Categories** | AI tools, AI agents, mobile, web, plus 14 languages |
+| 🌱 **New** | Repositories created in the last 7, 30 or 365 days, ranked by stars |
+| 🔥 **Hot** | Repositories of any age ranked by stars gained today, this week or this month |
+| 🏆 **All-time** | The most-starred repositories overall |
+| 🗂️ **Categories** | AI dev skills, AI tools, AI agents, mobile, web, plus 14 languages |
 | 🔎 **Instant filter** | Search by name, description, topic or language |
 | ➕ **Save for later** | Keep a personal list in the *Saved* tab (stored in your browser) |
 | 🌐 **English / Tiếng Việt** | Switch the interface language from the header |
-| 🔗 **Shareable views** | Every view has its own link, e.g. [`#/month/lang/rust`](https://dab246.github.io/github-stars-radar/#/month/lang/rust) |
+| 🔗 **Shareable views** | Every view has its own link, e.g. [`#/hot/week/lang/rust`](https://dab246.github.io/github-stars-radar/#/hot/week/lang/rust) |
 | 📱 **Responsive** | Table on desktop, compact cards on phones |
 | 🔄 **Always fresh** | GitHub Actions refreshes the data every 6 hours |
 
@@ -69,7 +75,8 @@ GitHub Trending shows the last few days and mixes old and new projects. **GitHub
 
 | Category | Matches repositories with |
 |---|---|
-| 🔥 **Trending** | everything |
+| ⭐ **All** | everything (the all-time view keeps repositories with 10k+ stars) |
+| 🛠️ **AI dev skills** | topics `agent-skills` `claude-skills` `claude-code-skills` `claude-code-plugin` `codex-skills` `cursor-rules` `subagents` `spec-driven-development` |
 | 🧠 **AI tools** | topics `llm` `ai` `generative-ai` `machine-learning` `mcp` `chatgpt` |
 | 🤖 **AI agents** | topics `ai-agent` `ai-agents` `agents` `agentic-ai` `multi-agent` `claude-code` |
 | 📱 **Mobile** | topics `android` `ios` `flutter` `react-native` `swiftui` `jetpack-compose` |
@@ -83,16 +90,17 @@ Missing something? [Suggest a category or language](https://github.com/dab246/gi
 ```mermaid
 flowchart LR
     cron["⏰ GitHub Actions<br/>every 6 hours"] --> fetch["scripts/fetch.mjs"]
-    fetch -- "search/repositories<br/>created:>=date sort:stars" --> api[("GitHub<br/>Search API")]
-    api --> fetch
+    fetch -- "new + all-time<br/>sort:stars" --> api[("GitHub<br/>Search API")]
+    fetch -- "hot<br/>stars gained" --> trending[("github.com<br/>/trending")]
+    fetch -- "hot: repo details" --> gql[("GitHub<br/>GraphQL API")]
     fetch --> json["site/data/repos.json"]
     json --> commit["commit to main"]
     commit --> pages["🚀 GitHub Pages"]
     pages --> user["👩‍💻 You"]
 ```
 
-- `scripts/fetch.mjs` runs one search per topic or language and per period. It merges the results and keeps the top 50 of each list. The search API cannot OR topics together, which is why it runs one query per topic.
-- GitHub does not expose how many stars a repository gained in a given week. So *top of the week* means the most-starred repositories **created** in the last 7 days. Month and year work the same way with 30 and 365 days.
+- **New and all-time** use the Search API. `scripts/fetch.mjs` runs one search per topic or language (and per period for *new*), merges the results and keeps the top 50 of each list. The search API cannot OR topics together, which is why it runs one query per topic.
+- **Hot** uses [GitHub Trending](https://github.com/trending), the only public source of *stars gained* in a period. The script reads the daily, weekly and monthly pages for every language, fetches topics and details for those repositories in a few GraphQL calls, and sorts each category by stars gained. Trending lists about 25 repositories per page, so hot lists are shorter than the others.
 - The site is plain HTML, CSS and JavaScript: no framework, no bundler, no build step.
 
 ## Run it locally
@@ -103,7 +111,7 @@ Requirements: Node.js 18+ and, optionally, the [GitHub CLI](https://cli.github.c
 git clone https://github.com/dab246/github-stars-radar.git
 cd github-stars-radar
 
-# 1. Fetch fresh data (about 5 minutes because of the search rate limit)
+# 1. Fetch fresh data (about 8 minutes because of the search rate limit)
 GITHUB_TOKEN=$(gh auth token) node scripts/fetch.mjs
 
 # 2. Serve the static site
@@ -118,7 +126,7 @@ python3 -m http.server -d site 8000   # open http://localhost:8000
 ```text
 .
 ├── .github/workflows/update.yml   # refresh data every 6h + deploy to Pages
-├── scripts/fetch.mjs              # GitHub Search API → site/data/repos.json
+├── scripts/fetch.mjs              # Search API + Trending + GraphQL → site/data/repos.json
 └── site/
     ├── index.html                 # page shell
     ├── styles.css                 # design tokens + responsive layout
@@ -158,4 +166,4 @@ If this project helps you discover something cool, please **give it a ⭐**. It 
 
 ## License
 
-[MIT](LICENSE). Repository data comes from the public [GitHub REST API](https://docs.github.com/en/rest/search/search#search-repositories) and belongs to the respective owners.
+[MIT](LICENSE). Repository data comes from the public [GitHub REST API](https://docs.github.com/en/rest/search/search#search-repositories), [GraphQL API](https://docs.github.com/en/graphql) and [Trending page](https://github.com/trending), and belongs to the respective owners.

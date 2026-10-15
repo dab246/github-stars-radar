@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 🌐 Live site
+    url: https://dab246.github.io/github-stars-radar/
+    about: Browse the most-starred new repositories.
+  - name: 🤝 Contributing guide
+    url: https://github.com/dab246/github-stars-radar/blob/main/CONTRIBUTING.md
+    about: How to set up the project and open a pull request.

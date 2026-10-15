@@ -1,0 +1,30 @@
+name: 🗂️ Category or language request
+description: Suggest a new category, topic or programming language to track.
+labels: [enhancement, good first issue]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Category or language
+      placeholder: DevOps
+    validations:
+      required: true
+  - type: textarea
+    id: topics
+    attributes:
+      label: GitHub topics or language name
+      description: Which topics (from github.com/topics) or linguist language should it match?
+      placeholder: kubernetes, terraform, devops
+    validations:
+      required: true
+  - type: textarea
+    id: examples
+    attributes:
+      label: Example repositories
+      description: A few repositories you would expect to see in this list.
+  - type: checkboxes
+    id: pr
+    attributes:
+      label: Contribution
+      options:
+        - label: I'd like to open the pull request for this myself.
